@@ -1,0 +1,10 @@
+# The New Economy v0.1.2.0
+Conversion:
+  Format: MySQL
+  File: Economy.db
+  Options:
+    Host: Localhost
+    Port: 3306
+    Database: sql_eco
+    User: root
+    Password: Password

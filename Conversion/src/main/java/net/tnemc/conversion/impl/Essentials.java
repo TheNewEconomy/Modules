@@ -1,0 +1,99 @@
+package net.tnemc.conversion.impl;
+
+import net.tnemc.conversion.ConversionModule;
+import net.tnemc.conversion.Converter;
+import net.tnemc.conversion.InvalidDatabaseImport;
+import net.tnemc.core.TNE;
+import net.tnemc.core.TNECore;
+import net.tnemc.core.common.data.TNEDataManager;
+import net.tnemc.core.currency.Currency;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ * The New Economy Minecraft Server Plugin
+ *
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to
+ * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ * Created by creatorfromhell on 06/30/2017.
+ */
+public class Essentials extends Converter {
+  private File dataDirectory = new File(TNECore.directory(), "../Essentials/userdata");
+
+  public Essentials() throws IOException {
+  }
+
+  @Override
+  public String name() {
+    return "Essentials";
+  }
+
+  @Override
+  public String type() {
+    return (Bukkit.getServer().getPluginManager().isPluginEnabled("EssentialsMysqlStorage"))? "mysql" : "yaml";
+  }
+
+  @Override
+  public File dataFolder() {
+    return new File(TNECore.directory(), "../Essentials/userdata");
+  }
+
+  @Override
+  public void mysql() throws InvalidDatabaseImport {
+    File configFile = new File(TNECore.directory(), "../EssentialsMysqlStorage/config.yml");
+    FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
+    final String table = config.getString("Database.Mysql.TableName");
+
+    initialize(new TNEDataManager(type(), config.getString("Database.Mysql.Host"),
+        config.getInt("Database.Mysql.Port"), config.getString("Database.Mysql.DatabaseName"),
+        config.getString("Database.Mysql.User"), config.getString("Database.Mysql.Password"),
+        table, "accounts.db",
+        false, false, 60, false));
+    open();
+    try(Connection connection = db.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet results = statement.executeQuery("SELECT player_uuid, money, offline_money FROM " + table + ";")) {
+
+      final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+      while(results.next()) {
+        ConversionModule.convertedAdd(results.getString("player_uuid"),
+            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getIdentifier(),
+            BigDecimal.valueOf(results.getDouble("money")));
+        ConversionModule.convertedAdd(results.getString("player_uuid"),
+            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getIdentifier(),
+            BigDecimal.valueOf(results.getDouble("offline_money")));
+      }
+    } catch(SQLException ignore) {}
+    close();
+
+  }
+
+  @Override
+  public void yaml() throws InvalidDatabaseImport {
+    if(!dataDirectory.isDirectory() || dataDirectory.listFiles() == null || dataDirectory.listFiles().length == 0) return;
+
+    for(File accountFile : dataDirectory.listFiles()) {
+
+      FileConfiguration acc = YamlConfiguration.loadConfiguration(accountFile);
+
+      final String name = (acc.contains("lastAccountName"))? acc.getString("lastAccountName")
+          : accountFile.getName().substring(0, accountFile.getName().lastIndexOf("."));
+
+      final BigDecimal money = acc.contains("money")? new BigDecimal(acc.getString("money")) : BigDecimal.ZERO;
+      String currency = TNE.manager().currencyManager().get(TNECore.server().defaultRegion(TNECore.eco().region().getMode())).name();
+
+      ConversionModule.convertedAdd(name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency, money);
+    }
+  }
+}
