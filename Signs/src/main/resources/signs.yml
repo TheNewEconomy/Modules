@@ -1,0 +1,25 @@
+Signs:
+
+  #All configurations relating to item signs.
+  Item:
+
+    #Whether this sign type is enabled.
+    Enabled: true
+
+    #The max amount of this sign type any one person may own.
+    Max: 5
+
+    #The cost to place this sign.
+    PlaceCost: 0.0
+
+  #Configurations relating to safe signs.
+  Safe:
+
+    #Whether this sign type is enabled.
+    Enabled: true
+
+    #The max amount of this sign type any one person may own.
+    Max: 1
+
+    #The cost to place this sign.
+    PlaceCost: 0.0
