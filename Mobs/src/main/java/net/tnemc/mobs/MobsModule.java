@@ -1,5 +1,4 @@
-package net.tnemc.signs.types;
-/*
+package net.tnemc.mobs;/*
  * The New Economy
  * Copyright (C) 2022 - 2023 Daniel "creatorfromhell" Vidmar
  *
@@ -17,38 +16,11 @@ package net.tnemc.signs.types;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * SignType
+ * MobsModule
  *
  * @author creatorfromhell
  * @since 0.1.0.0
  */
-public interface SignType {
-
-  default Map<Integer, SignStep> steps() {
-    return new HashMap<>();
-  }
-
-  /**
-   * @return The name of this sign type.
-   */
-  String name();
-
-
-  /**
-   * @return The permission node required to use this sign.
-   */
-  String usePermission();
-
-  /**
-   * @return The permission node required to create this sign.
-   */
-  String createPermission();
-
-  default boolean isStepped() {
-    return steps().size() > 0;
-  }
+public class MobsModule {
 }

@@ -9,6 +9,7 @@
     <modules>
         <module>Conversion</module>
         <module>Signs</module>
+        <module>Mobs</module>
     </modules>
 
     <properties>

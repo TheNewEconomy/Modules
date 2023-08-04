@@ -49,7 +49,7 @@ public class XConomy extends Converter {
     final Set<String> accounts = config.getKeys(false);
     for(String uuid : accounts) {
       final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-      ConversionModule.convertedAdd(uuid, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getIdentifier(), new BigDecimal(config.getString(uuid)));
+      ConversionModule.convertedAdd(uuid, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(config.getString(uuid)));
     }
   }
 }

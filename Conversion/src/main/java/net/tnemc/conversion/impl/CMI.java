@@ -29,10 +29,8 @@ import java.sql.Statement;
  */
 public class CMI extends Converter {
 
-  private final File configFile = new File(TNECore.directory(), "../CMI/dataBaseInfo.yml");
-  private final YamlFile config = YamlFile.loadConfiguration(configFile, true);
-
-  public CMI() throws IOException {
+  public CMI() {
+    super("../CMI/dataBaseInfo.yml");
   }
 
   @Override
@@ -70,7 +68,7 @@ public class CMI extends Converter {
       final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
       while(results.next()) {
         ConversionModule.convertedAdd(results.getString("username"),
-            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getIdentifier(),
+            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(),
             BigDecimal.valueOf(results.getDouble("Balance")));
       }
     } catch(SQLException ignore) {}
@@ -91,7 +89,7 @@ public class CMI extends Converter {
         final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
         while(results.next()) {
           ConversionModule.convertedAdd(results.getString("username"),
-              TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getIdentifier(),
+              TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(),
               BigDecimal.valueOf(results.getDouble("Balance")));
         }
       } catch(SQLException ignore) {}

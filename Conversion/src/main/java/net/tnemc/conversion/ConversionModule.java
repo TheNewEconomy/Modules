@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * ConversionModule
@@ -95,8 +96,8 @@ public class ConversionModule implements Module {
     return null;
   }
 
-  public static void convertedAdd(String identifier, String world, String currency, BigDecimal amount) {
-    File conversionFile = new File(TNECore.directory(), "extracted.yml");
+  public static void convertedAdd(String identifier, String world, UUID currency, BigDecimal amount) {
+    final File conversionFile = new File(TNECore.directory(), "extracted.yml");
     final YamlFile conversion;
     try {
       conversion = YamlFile.loadConfiguration(conversionFile);
@@ -106,6 +107,7 @@ public class ConversionModule implements Module {
     }
 
     if(!conversion.contains("Accounts")) {
+
       conversion.createSection("Accounts");
       try {
         conversion.save(conversionFile);
@@ -117,7 +119,7 @@ public class ConversionModule implements Module {
 
     BigDecimal starting = BigDecimal.ZERO;
 
-    String newID = identifier.replaceAll("\\.", "!").replaceAll("\\-", "@").replaceAll("\\_", "%");
+    final String newID = identifier.replaceAll("\\.", "!").replaceAll("\\-", "@").replaceAll("\\_", "%");
 
     if(conversion.contains("Accounts." + newID + ".Balances." + world + "." + currency)) {
       starting = new BigDecimal(conversion.getString("Accounts." + newID + ".Balances." + world + "." + currency));

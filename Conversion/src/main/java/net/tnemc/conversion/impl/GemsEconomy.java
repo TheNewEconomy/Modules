@@ -8,18 +8,23 @@ import net.tnemc.core.TNECore;
 import net.tnemc.core.common.api.IDFinder;
 import net.tnemc.core.common.currency.TNECurrency;
 import net.tnemc.core.common.data.TNEDataManager;
+import net.tnemc.core.compatibility.log.DebugLevel;
 import net.tnemc.core.currency.Currency;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,8 +38,11 @@ import java.util.Set;
  * Created by creatorfromhell on 06/30/2017.
  */
 public class GemsEconomy extends Converter {
-  private File configFile = new File(TNECore.directory(), "../GemsEconomy/config.yml");
-  private YamlFile config = YamlFile.loadConfiguration(configFile, true);
+
+  public GemsEconomy() {
+    super("../GemsEconomy/config.yml");
+  }
+
   @Override
   public String name() {
     return "GemsEconomy";
@@ -65,12 +73,13 @@ public class GemsEconomy extends Converter {
         ResultSet results = statement.executeQuery("SELECT * FROM " + table + ";")) {
 
       while(results.next()) {
-        TNECurrency currency = TNE.manager().currencyManager().get(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-        if(TNE.manager().currencyManager().contains(TNECore.server().defaultRegion(TNECore.eco().region().getMode()), results.getString("currency_id"))) {
-          currency = TNE.manager().currencyManager().get(TNECore.server().defaultRegion(TNECore.eco().region().getMode()), results.getString("currency_id"));
+        Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+        final Optional<Currency> curOptional = TNECore.eco().currency().findCurrency(results.getString("currency_id"));
+        if(curOptional.isPresent()) {
+          cur = curOptional.get();
         }
         ConversionModule.convertedAdd(results.getString("account_id"),
-            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getIdentifier(),
+            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(),
             BigDecimal.valueOf(results.getDouble("balance")));
       }
     } catch(SQLException ignore) {}
@@ -79,33 +88,38 @@ public class GemsEconomy extends Converter {
 
   @Override
   public void yaml() throws InvalidDatabaseImport {
-    File dataFile = new File(TNECore.directory(), "../GemsEconomy/data.yml");
-    FileConfiguration dataConfiguration = YamlConfiguration.loadConfiguration(dataFile);
+    final File dataFile = new File(TNECore.directory(), "../GemsEconomy/data.yml");
+    try {
+      final YamlFile dataConfiguration = YamlFile.loadConfiguration(dataFile);
 
-    final ConfigurationSection accountSection = dataConfiguration.getConfigurationSection("accounts");
-    if(accountSection != null) {
-      final Set<String> accounts = accountSection.getKeys(false);
-      for(String uuid : accounts) {
-        final ConfigurationSection balanceSection = accountSection.getConfigurationSection(uuid + ".balances");
-        if(balanceSection != null) {
-          final Set<String> currencies = balanceSection.getKeys(false);
-          for(String currency : currencies) {
-            final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-            if(TNE.manager().currencyManager().contains(TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency)) {
-              cur = TNE.manager().currencyManager().get(TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency);
+      final ConfigurationSection accountSection = dataConfiguration.getConfigurationSection("accounts");
+      if(accountSection != null) {
+        final Set<String> accounts = accountSection.getKeys(false);
+        for(String uuid : accounts) {
+          final ConfigurationSection balanceSection = accountSection.getConfigurationSection(uuid + ".balances");
+          if(balanceSection != null) {
+            final Set<String> currencies = balanceSection.getKeys(false);
+            for(String currency : currencies) {
+              Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+              final Optional<Currency> curOptional = TNECore.eco().currency().findCurrency(currency);
+              if(curOptional.isPresent()) {
+                cur = curOptional.get();
+              }
+
+              BigDecimal value = BigDecimal.ZERO;
+              try {
+                value = new BigDecimal(dataConfiguration.getDouble("accounts." + uuid + ".balances." + currency));
+              } catch(Exception ignore) {
+                System.out.println("Couldn't parse balance value for node: " + "accounts." + uuid + ".balances." + currency + ". This balance will have to be manually converted using /money give");
+              }
+
+              ConversionModule.convertedAdd(uuid, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), value);
             }
-
-            BigDecimal value = BigDecimal.ZERO;
-            try {
-              value = new BigDecimal(dataConfiguration.getDouble("accounts." + uuid + ".balances." + currency));
-            } catch(Exception ignore) {
-              System.out.println("Couldn't parse balance value for node: " + "accounts." + uuid + ".balances." + currency + ". This balance will have to be manually converted using /money give");
-            }
-
-            ConversionModule.convertedAdd(IDFinder.getUsername(uuid), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getIdentifier(), value);
           }
         }
       }
+    } catch (IOException e) {
+      TNECore.log().error("Failed to convert GemsEconomy.", e, DebugLevel.STANDARD);
     }
   }
 }
