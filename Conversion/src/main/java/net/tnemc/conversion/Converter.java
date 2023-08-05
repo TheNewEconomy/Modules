@@ -44,10 +44,12 @@ public abstract class Converter {
   public Converter(@NotNull final String configLocation) {
     if(!configLocation.trim().equalsIgnoreCase("")) {
       configFile = new File(TNECore.directory(), configLocation);
-      try {
-        config = YamlFile.loadConfiguration(configFile, true);
-      } catch(IOException e) {
-        TNECore.log().error("Error while attempting to load conversion config.", e, DebugLevel.STANDARD);
+      if(configFile.exists()) {
+        try {
+          config = YamlFile.loadConfiguration(configFile, true);
+        } catch (IOException e) {
+          TNECore.log().error("Error while attempting to load conversion config.", e, DebugLevel.STANDARD);
+        }
       }
     } else {
       configFile = null;
@@ -85,38 +87,16 @@ public abstract class Converter {
       TNECore.log().error("Something went wrong with conversion.", e, DebugLevel.STANDARD);
     }
     try {
-      switch(type().toLowerCase()) {
-        case "mysql":
-          System.out.println("MySQL Conversion for : " + name());
-          mysql();
-          break;
-        case "sqlite":
-          sqlite();
-          break;
-        case "h2":
-          h2();
-          break;
-        case "postgre":
-          postgre();
-          break;
-        case "flatfile":
-          flatfile();
-          break;
-        case "mini":
-          flatfile();
-          break;
-        case "json":
-          json();
-          break;
-        case "yaml":
-          yaml();
-          break;
-        case "inventory":
-          inventoryDB();
-          break;
-        case "experience":
-          expDB();
-          break;
+      switch (type().toLowerCase()) {
+        case "mysql" -> mysql();
+        case "sqlite" -> sqlite();
+        case "h2" -> h2();
+        case "postgre" -> postgre();
+        case "flatfile", "mini" -> flatfile();
+        case "json" -> json();
+        case "yaml" -> yaml();
+        case "inventory" -> inventoryDB();
+        case "experience" -> expDB();
       }
     } catch(InvalidDatabaseImport exception) {
       TNECore.log().error("Something went wrong with conversion.", exception, DebugLevel.STANDARD);

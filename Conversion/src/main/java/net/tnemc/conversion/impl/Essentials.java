@@ -3,23 +3,14 @@ package net.tnemc.conversion.impl;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
-import net.tnemc.core.TNE;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.common.data.TNEDataManager;
 import net.tnemc.core.compatibility.log.DebugLevel;
 import net.tnemc.core.currency.Currency;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * The New Economy Minecraft Server Plugin
@@ -33,7 +24,7 @@ public class Essentials extends Converter {
   private final File dataDirectory = new File(TNECore.directory(), "../Essentials/userdata");
   final File mysqlStorageFile = new File(TNECore.directory(), "../EssentialsMysqlStorage/config.yml");
 
-  public Essentials() throws IOException {
+  public Essentials() {
     super("");
   }
 
@@ -57,7 +48,7 @@ public class Essentials extends Converter {
 
     if(!mysqlStorageFile.exists()) return;
 
-    try {
+    /*try {
       final YamlFile config = YamlFile.loadConfiguration(mysqlStorageFile);
 
       final String table = config.getString("Database.Mysql.TableName");
@@ -87,7 +78,7 @@ public class Essentials extends Converter {
 
     } catch (IOException e) {
       TNECore.log().error("Failed to convert EssentialsMysqlStorage Data!", DebugLevel.OFF);
-    }
+    }*/
 
   }
 

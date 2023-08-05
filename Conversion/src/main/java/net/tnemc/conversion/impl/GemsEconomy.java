@@ -3,27 +3,15 @@ package net.tnemc.conversion.impl;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
-import net.tnemc.core.TNE;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.common.api.IDFinder;
-import net.tnemc.core.common.currency.TNECurrency;
-import net.tnemc.core.common.data.TNEDataManager;
 import net.tnemc.core.compatibility.log.DebugLevel;
 import net.tnemc.core.currency.Currency;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Optional;
 import java.util.Set;
 
@@ -60,7 +48,7 @@ public class GemsEconomy extends Converter {
 
   @Override
   public void mysql() throws InvalidDatabaseImport {
-    initialize(new TNEDataManager(type(), config.getString("mysql.host"),
+    /*initialize(new TNEDataManager(type(), config.getString("mysql.host"),
         config.getInt("mysql.port"), config.getString("mysql.database"),
         config.getString("mysql.username"), config.getString("mysql.password"),
         config.getString("mysql.tableprefix"), "accounts.db",
@@ -83,7 +71,7 @@ public class GemsEconomy extends Converter {
             BigDecimal.valueOf(results.getDouble("balance")));
       }
     } catch(SQLException ignore) {}
-    close();
+    close();*/
   }
 
   @Override

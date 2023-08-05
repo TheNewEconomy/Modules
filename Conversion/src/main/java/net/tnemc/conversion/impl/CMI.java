@@ -4,18 +4,11 @@ import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.common.data.TNEDataManager;
 import net.tnemc.core.currency.Currency;
-import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * The New Economy Minecraft Server Plugin
@@ -50,7 +43,7 @@ public class CMI extends Converter {
 
   @Override
   public void mysql() throws InvalidDatabaseImport {
-
+/*
     final String prefix = config.getString("mysql.tablePrefix");
     final String table = prefix + "users";
     final String[] workHost = config.getString("mysql.hostname").split(":");
@@ -72,7 +65,7 @@ public class CMI extends Converter {
             BigDecimal.valueOf(results.getDouble("Balance")));
       }
     } catch(SQLException ignore) {}
-    close();
+    close();*/
 
   }
 

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.tnemc</groupId>
     <artifactId>TNEModules</artifactId>
-    <version>1.0.0.0-PRE-1</version>
+    <version>0.1.2.0-PRE-1</version>
     <packaging>pom</packaging>
     <name>The New Economy Modules</name>
 
@@ -69,8 +69,26 @@
     <dependencies>
         <dependency>
             <groupId>net.tnemc</groupId>
+            <artifactId>BukkitCore</artifactId>
+            <version>0.1.2.0-Pre-20</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.tnemc</groupId>
+            <artifactId>Paper</artifactId>
+            <version>0.1.2.0-Pre-20</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.tnemc</groupId>
+            <artifactId>Sponge8Core</artifactId>
+            <version>0.1.2.0-Pre-20</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.tnemc</groupId>
             <artifactId>EconomyCore</artifactId>
-            <version>0.1.2.0-PRE-8</version>
+            <version>0.1.2.0-Pre-20</version>
             <scope>provided</scope>
         </dependency>
         <!-- Part of Java EE, removed from Java SE in JDK11 -->

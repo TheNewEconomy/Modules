@@ -17,18 +17,28 @@ package net.tnemc.conversion;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import net.tnemc.conversion.command.platform.BukkitConvert;
+import net.tnemc.conversion.command.platform.PaperConvert;
+import net.tnemc.conversion.command.platform.SpongeConvert;
+import net.tnemc.conversion.command.resolvers.ConverterResolver;
+import net.tnemc.conversion.command.resolvers.ConverterSuggestion;
 import net.tnemc.core.TNECore;
+import net.tnemc.core.command.parameters.resolver.CurrencyResolver;
+import net.tnemc.core.command.parameters.suggestion.CurrencySuggestion;
+import net.tnemc.core.compatibility.log.DebugLevel;
+import net.tnemc.core.currency.Currency;
 import net.tnemc.core.io.storage.StorageManager;
 import net.tnemc.core.module.Module;
 import net.tnemc.core.module.ModuleInfo;
+import net.tnemc.libs.lamp.commands.CommandHandler;
+import net.tnemc.libs.lamp.commands.orphan.OrphanCommand;
+import net.tnemc.libs.lamp.commands.orphan.Orphans;
 import org.simpleyaml.configuration.file.YamlFile;
-import org.simpleyaml.configuration.implementation.snakeyaml.lib.Yaml;
-import revxrsal.commands.CommandHandler;
-import revxrsal.commands.orphan.OrphanCommand;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,18 +51,27 @@ import java.util.UUID;
 @ModuleInfo(
     name = "Conversion",
     author = "creatorfromhell",
-    version = "1.2.0",
-    updateURL = "https://tnemc.net/files/module-version.xml"
+    version = "1.2.0"
 )
+//https://tnemc.net/files/module-version.xml
 public class ConversionModule implements Module {
 
-  @Override
-  public void enable(TNECore tneCore) {
+  private final ConverterManager manager;
 
+  private static ConversionModule instance;
+
+  public ConversionModule() {
+    this.manager = new ConverterManager();
+    instance = this;
   }
 
   @Override
-  public void disable(TNECore tneCore) {
+  public void enable(TNECore core) {
+    TNECore.log().inform("Enabled conversion module!", DebugLevel.OFF);
+  }
+
+  @Override
+  public void disable(TNECore core) {
 
   }
 
@@ -77,23 +96,32 @@ public class ConversionModule implements Module {
   }
 
   @Override
-  public void registerCommands(CommandHandler commandHandler) {
+  public void registerCommands(CommandHandler command) {
+    command.getAutoCompleter().registerParameterSuggestions(Converter.class, new ConverterSuggestion());
+    command.registerValueResolver(Converter.class, new ConverterResolver());
 
   }
 
   @Override
   public List<OrphanCommand> registerMoneySub() {
-    return null;
+    return new ArrayList<>();
   }
 
   @Override
   public List<OrphanCommand> registerTransactionSub() {
-    return null;
+    return new ArrayList<>();
   }
 
   @Override
   public List<OrphanCommand> registerAdminSub() {
-    return null;
+
+    switch (TNECore.server().name().toLowerCase()) {
+      case "paper" -> TNECore.instance().command().register(Orphans.path("tne").handler(new PaperConvert()));
+      case "sponge" -> TNECore.instance().command().register(Orphans.path("tne").handler(new SpongeConvert()));
+      default -> TNECore.instance().command().register(Orphans.path("tne").handler(new BukkitConvert()));
+    }
+
+    return new ArrayList<>();
   }
 
   public static void convertedAdd(String identifier, String world, UUID currency, BigDecimal amount) {
@@ -131,5 +159,13 @@ public class ConversionModule implements Module {
     } catch (IOException e) {
       TNECore.log().error("Error attempting to save extracted.yml during conversion");
     }
+  }
+
+  public static ConversionModule instance() {
+    return instance;
+  }
+
+  public ConverterManager getManager() {
+    return manager;
   }
 }
