@@ -9,6 +9,7 @@ import net.tnemc.core.currency.Currency;
 import java.io.File;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.UUID;
 
 /**
  * The New Economy Minecraft Server Plugin
@@ -81,7 +82,7 @@ public class CMI extends Converter {
 
         final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
         while(results.next()) {
-          ConversionModule.convertedAdd(results.getString("username"),
+          ConversionModule.convertedAdd(UUID.randomUUID(), results.getString("username"),
               TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(),
               BigDecimal.valueOf(results.getDouble("Balance")));
         }

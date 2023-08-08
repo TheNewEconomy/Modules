@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The New Economy Minecraft Server Plugin
@@ -101,7 +102,7 @@ public class GemsEconomy extends Converter {
                 System.out.println("Couldn't parse balance value for node: " + "accounts." + uuid + ".balances." + currency + ". This balance will have to be manually converted using /money give");
               }
 
-              ConversionModule.convertedAdd(uuid, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), value);
+              ConversionModule.convertedAdd(UUID.fromString(uuid), "", TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), value);
             }
           }
         }

@@ -11,6 +11,7 @@ import org.simpleyaml.configuration.file.YamlFile;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * The New Economy Minecraft Server Plugin
@@ -91,13 +92,18 @@ public class Essentials extends Converter {
       try {
         final YamlFile acc = YamlFile.loadConfiguration(accountFile);
 
-        final String name = (acc.contains("lastAccountName"))? acc.getString("lastAccountName")
-                : accountFile.getName().substring(0, accountFile.getName().lastIndexOf("."));
+        if(!acc.contains("last-account-name")) {
+          TNECore.log().inform("Skipping account of file: " + accountFile.getName().substring(0, accountFile.getName().lastIndexOf(".")) + ". Invalid format.");
+          continue;
+        }
+
+        //because essentials is essentials
+        final String name = acc.getString("last-account-name").replaceAll("town_", "town-").replaceAll("nation_", "nation-");
 
         final BigDecimal money = acc.contains("money")? new BigDecimal(acc.getString("money")) : BigDecimal.ZERO;
         final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
 
-        ConversionModule.convertedAdd(name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(), money);
+        ConversionModule.convertedAdd(UUID.fromString(accountFile.getName().substring(0, accountFile.getName().lastIndexOf("."))), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(), money);
 
       } catch (IOException e) {
         TNECore.log().error("Failed to convert Essentials Account: " + accountFile.getName() + ".", DebugLevel.OFF);

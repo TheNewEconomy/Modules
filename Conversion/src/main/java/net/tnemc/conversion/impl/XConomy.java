@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The New Economy Minecraft Server Plugin
@@ -49,7 +50,7 @@ public class XConomy extends Converter {
     final Set<String> accounts = config.getKeys(false);
     for(String uuid : accounts) {
       final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-      ConversionModule.convertedAdd(uuid, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(config.getString(uuid)));
+      ConversionModule.convertedAdd(UUID.fromString(uuid), "", TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(config.getString(uuid)));
     }
   }
 }

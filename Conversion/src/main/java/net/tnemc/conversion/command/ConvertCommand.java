@@ -16,7 +16,6 @@ package net.tnemc.conversion.command;/*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.core.TNECore;
 import net.tnemc.core.compatibility.CmdSource;
@@ -24,8 +23,6 @@ import net.tnemc.core.compatibility.scheduler.ChoreExecution;
 import net.tnemc.core.compatibility.scheduler.ChoreTime;
 import net.tnemc.core.io.message.MessageData;
 import net.tnemc.core.utils.Extractor;
-
-import java.util.Optional;
 
 /**
  * ConvertCommand

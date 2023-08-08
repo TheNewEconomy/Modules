@@ -124,7 +124,7 @@ public class ConversionModule implements Module {
     return new ArrayList<>();
   }
 
-  public static void convertedAdd(String identifier, String world, UUID currency, BigDecimal amount) {
+  public static void convertedAdd(final UUID id, String name, String world, UUID currency, BigDecimal amount) {
     final File conversionFile = new File(TNECore.directory(), "extracted.yml");
     final YamlFile conversion;
     try {
@@ -147,7 +147,11 @@ public class ConversionModule implements Module {
 
     BigDecimal starting = BigDecimal.ZERO;
 
-    final String newID = identifier.replaceAll("\\.", "!").replaceAll("\\-", "@").replaceAll("\\_", "%");
+    final String newID = name.replaceAll("\\.", "!").replaceAll("\\-", "@").replaceAll("\\_", "%");
+
+    if(!conversion.contains("Accounts." + newID + ".id")) {
+      conversion.set("Accounts." + newID + ".id", id.toString());
+    }
 
     if(conversion.contains("Accounts." + newID + ".Balances." + world + "." + currency)) {
       starting = new BigDecimal(conversion.getString("Accounts." + newID + ".Balances." + world + "." + currency));
