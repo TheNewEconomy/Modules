@@ -3,12 +3,6 @@ Mobs:
   #Various multipliers for mob rewards. These may be overridden per-mob.
   Multipliers:
 
-    #Multiplier for using fist to get the kill
-    Fist: 2.0
-
-    #Multiplier example for material multipliers.
-    DIAMOND_SWORD: 0.8
-
     #Multiplier if the killer is the owner of the mob if tameable(wolf/ocelot).
     Owner: -2.0
 
@@ -30,3 +24,12 @@ Mobs:
 
       #Rounded time. (include wiki documentation here)
       Evening: 1.8
+
+    #Multipliers for materials, yes fist is not a material, but let's pretend.
+    Materials:
+
+      #Multiplier for using fist to get the kill
+      Fist: 2.0
+
+      #Multiplier example for material multipliers.
+      DIAMOND_SWORD: 0.8
