@@ -1,0 +1,32 @@
+Mobs:
+
+  #Various multipliers for mob rewards. These may be overridden per-mob.
+  Multipliers:
+
+    #Multiplier for using fist to get the kill
+    Fist: 2.0
+
+    #Multiplier example for material multipliers.
+    DIAMOND_SWORD: 0.8
+
+    #Multiplier if the killer is the owner of the mob if tameable(wolf/ocelot).
+    Owner: -2.0
+
+    #Multipler for when a baby form of the mob is killed.
+    Baby: 0.5
+
+    #Multipliers for aggressiveness.
+    Aggression:
+
+      Peaceful: 0.2
+      Passive: 0.5
+      Hostile: 1.0
+
+    #Multiplier for time.
+    Time:
+
+      #Specific time example
+      900: 1.5
+
+      #Rounded time. (include wiki documentation here)
+      Evening: 1.8

@@ -1,11 +1,13 @@
 package net.tnemc.conversion.impl;
 
+import com.earth2me.essentials.User;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
 import net.tnemc.core.compatibility.log.DebugLevel;
 import net.tnemc.core.currency.Currency;
+import org.bukkit.Bukkit;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
@@ -85,28 +87,21 @@ public class Essentials extends Converter {
 
   @Override
   public void yaml() throws InvalidDatabaseImport {
-    if(!dataDirectory.isDirectory() || dataDirectory.listFiles() == null ) return;
 
-    for(File accountFile : dataDirectory.listFiles()) {
+    com.earth2me.essentials.Essentials ess = (com.earth2me.essentials.Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+    if(ess != null) {
+      for(final UUID id : ess.getUsers().getAllUserUUIDs()) {
+        TNECore.log().inform("Converting Essentials User: " + id.toString(), DebugLevel.OFF);
 
-      try {
-        final YamlFile acc = YamlFile.loadConfiguration(accountFile);
+        final User user = ess.getUser(id);
 
-        if(!acc.contains("last-account-name")) {
-          TNECore.log().inform("Skipping account of file: " + accountFile.getName().substring(0, accountFile.getName().lastIndexOf(".")) + ". Invalid format.");
+        if(user.getName() == null) {
+          TNECore.log().inform("Essentials has no name for user: " + id.toString(), DebugLevel.OFF);
           continue;
         }
 
-        //because essentials is essentials
-        final String name = acc.getString("last-account-name").replaceAll("town_", "town-").replaceAll("nation_", "nation-");
-
-        final BigDecimal money = acc.contains("money")? new BigDecimal(acc.getString("money")) : BigDecimal.ZERO;
         final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-
-        ConversionModule.convertedAdd(UUID.fromString(accountFile.getName().substring(0, accountFile.getName().lastIndexOf("."))), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(), money);
-
-      } catch (IOException e) {
-        TNECore.log().error("Failed to convert Essentials Account: " + accountFile.getName() + ".", DebugLevel.OFF);
+        ConversionModule.convertedAdd(id, user.getName(), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(), user.getMoney());
       }
     }
   }

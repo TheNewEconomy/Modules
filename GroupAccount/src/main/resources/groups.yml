@@ -1,0 +1,7 @@
+Groups:
+
+  #The max number of group accounts a player may be in, leave at 0 to allow unlimited.
+  MaxAccounts: 5
+
+  #The max number of members in a group account.
+  MaxMembers: 5

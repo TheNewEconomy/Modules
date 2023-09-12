@@ -1,0 +1,94 @@
+Banks:
+
+  #Configurations related to the default currency restrictions. This means these currencies can't
+  #be deposited into banks by default.
+  Restrictions:
+    - ExampleCurrency
+
+  #Configurations relating to account interest rates.
+  Interest:
+
+    #Whether balance interest is enabled.
+    Enabled: true
+
+    #The default configurations for collecting interest.
+    Rates:
+
+      #The default rate for collecting interest, if no currency-specific options are available.
+      Default: 1.25
+
+      #An example currency-specific option. Format is Identifier: rate
+      ExampleCurrency: 2.5
+
+    #Default configurations relating to maximum balance for an account.
+    Max:
+
+      #The default max balance if no currency-specific options are available.
+      Default: 2000000000000
+
+      #An example currency-specific option. Format is Identifier: max
+      ExampleCurrency: 2000000000
+
+    #Default configurations relating to minimum balance to gain interest.
+    Min:
+
+      #The default min for collecting interest if no currency-specific options are available.
+      Default: 0
+
+      #An example currency-specific option. Format is Identifier: min
+      ExampleCurrency: 5000
+
+  #Configurations relating to bank account levels. These are based on the balances
+  Levels:
+
+    #The balance required to be classified in this level.
+    10000:
+
+      #Configurations related to currency restrictions for this level. This means these currencies can't
+      #be deposited in this level.
+      Restriction:
+        - ExampleCurrency
+
+      #Configurations relating to maximum balance for an account in this level.
+      Max:
+
+        #The default max balance if no currency-specific options are available.
+        Default: 2000000000000
+
+        #An example currency-specific option. Format is Identifier: max
+        ExampleCurrency: 2000000000
+
+      #Configurations relating to interest rates for this level.
+      Rates:
+
+        #The default interest rate for this level, if not currency-specific options are available.
+        Default: 2.25
+
+        #An example currency-specific option. Format is Identifier: rate
+        ExampleCurrency: 3.5
+
+    #The balance required to be classified in this level.
+    20000:
+
+      #Configurations related to currency restrictions for this level. This means these currencies can't
+      #be deposited in this level.
+      Restriction:
+        - ExampleCurrency
+
+      #Configurations relating to maximum balance for an account in this level.
+      Max:
+
+        #The default max balance if no currency-specific options are available.
+        Default: 2000000000000
+
+        #An example currency-specific option. Format is Identifier: max
+        ExampleCurrency: 2000000000
+
+      #Configurations relating to interest rates for this level.
+      Rates:
+
+        #The default interest rate for this level, if not currency-specific options are available.
+        Default: 2.25
+
+        #An example currency-specific option. Format is Identifier: rate
+        ExampleCurrency: 3.5
