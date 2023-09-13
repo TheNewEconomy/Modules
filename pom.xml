@@ -73,25 +73,25 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>BukkitCore</artifactId>
-            <version>0.1.2.0-Pre-28</version>
+            <version>0.1.2.1-Pre-2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Paper</artifactId>
-            <version>0.1.2.0-Pre-28</version>
+            <version>0.1.2.1-Pre-2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Sponge8Core</artifactId>
-            <version>0.1.2.0-Pre-28</version>
+            <version>0.1.2.1-Pre-2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>EconomyCore</artifactId>
-            <version>0.1.2.0-Pre-28</version>
+            <version>0.1.2.1-Pre-2</version>
             <scope>provided</scope>
         </dependency>
         <!-- Part of Java EE, removed from Java SE in JDK11 -->

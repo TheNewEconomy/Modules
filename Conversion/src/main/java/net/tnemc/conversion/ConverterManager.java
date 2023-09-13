@@ -65,6 +65,6 @@ public class ConverterManager {
     }
 
     public Optional<Converter> find(String name) {
-        return Optional.of(converters.get(name));
+        return Optional.of(converters.get(name.toLowerCase()));
     }
 }
