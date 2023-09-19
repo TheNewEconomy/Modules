@@ -46,7 +46,7 @@ public class ConverterManager {
     }
 
     public void add(Converter converter) {
-        converters.put(converter.name(), converter);
+        converters.put(converter.name().toLowerCase(), converter);
     }
 
     public List<String> search() {
