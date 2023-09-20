@@ -1,22 +1,35 @@
 Mobs:
 
-  #Various multipliers for mob rewards. These may be overridden per-mob.
-  Multipliers:
+  #Various modifiers for mob rewards. These may be overridden per-mob.
+  Modifier:
 
-    #Multiplier if the killer is the owner of the mob if tameable(wolf/ocelot).
+    #The order by which the modifiers should be run. The order tells TNE what modifiers to apply in what order.
+    #The first list entry is the first modifier run.
+    Order:
+      - "Materials"
+      - "Time"
+      - "Baby"
+      - "Agression"
+      - "Owner"
+
+    #Modifier if the killer is the owner of the mob if tameable(wolf/ocelot).
+    #Ability to prefix an operation to expand use-case.
+    #i.e. +=-2.0, \=3
+    #Ability to comma separate to use random range. I.e. -0.1, -2.0 will select a random value between
+    #-0.1 and -2.0 to apply
     Owner: -2.0
 
-    #Multipler for when a baby form of the mob is killed.
+    #Modifier for when a baby form of the mob is killed.
     Baby: 0.5
 
-    #Multipliers for aggressiveness.
+    #Modifiers for aggressiveness.
     Aggression:
 
       Peaceful: 0.2
       Passive: 0.5
       Hostile: 1.0
 
-    #Multiplier for time.
+    #Modifier for time.
     Time:
 
       #Specific time example
@@ -25,11 +38,11 @@ Mobs:
       #Rounded time. (include wiki documentation here)
       Evening: 1.8
 
-    #Multipliers for materials, yes fist is not a material, but let's pretend.
+    #Modifiers for materials, yes fist is not a material, but let's pretend.
     Materials:
 
-      #Multiplier for using fist to get the kill
+      #Modifier for using fist to get the kill
       Fist: 2.0
 
-      #Multiplier example for material multipliers.
+      #Modifier example for material multipliers.
       DIAMOND_SWORD: 0.8

@@ -88,22 +88,6 @@ public class Essentials extends Converter {
   @Override
   public void yaml() throws InvalidDatabaseImport {
 
-    /*com.earth2me.essentials.Essentials ess = (com.earth2me.essentials.Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-    if(ess != null) {
-      for(final UUID id : ess.getUsers().getAllUserUUIDs()) {
-        TNECore.log().inform("Converting Essentials User: " + id.toString(), DebugLevel.OFF);
-
-        final User user = ess.getUser(id);
-
-        if(user.getName() == null) {
-          TNECore.log().inform("Essentials has no name for user: " + id.toString(), DebugLevel.OFF);
-          continue;
-        }
-
-        final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-        ConversionModule.convertedAdd(id, user.getName(), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(), user.getMoney());
-      }
-    }*/
     if(!dataDirectory.isDirectory() || dataDirectory.listFiles() == null ) return;
 
     for(File accountFile : dataDirectory.listFiles()) {

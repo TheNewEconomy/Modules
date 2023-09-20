@@ -1,13 +1,18 @@
 package net.tnemc.conversion.impl;
 
+import net.tnemc.conversion.ConfigurableSQLConnector;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
 import net.tnemc.core.currency.Currency;
+import net.tnemc.core.io.storage.SQLEngine;
+import net.tnemc.core.io.storage.connect.SQLConnector;
+import net.tnemc.core.io.storage.engine.sql.MySQL;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.UUID;
 
@@ -44,8 +49,8 @@ public class CMI extends Converter {
 
   @Override
   public void mysql() throws InvalidDatabaseImport {
-/*
-    final String prefix = config.getString("mysql.tablePrefix");
+
+    /*final String prefix = config.getString("mysql.tablePrefix");
     final String table = prefix + "users";
     final String[] workHost = config.getString("mysql.hostname").split(":");
 
@@ -68,6 +73,26 @@ public class CMI extends Converter {
     } catch(SQLException ignore) {}
     close();*/
 
+    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+
+    final String prefix = config.getString("mysql.tablePrefix");
+    final String table = prefix + "users";
+    final String[] workHost = config.getString("mysql.hostname").split(":");
+
+    final SQLEngine engine = new MySQL();
+    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(TNECore.directory(), "../CMI/cmi.sqlite.db"),
+            workHost[0], Integer.valueOf(workHost[1]), config.getString("mysql.database"), config.getString("mysql.username"), config.getString("mysql.password"));
+
+    connector.initialize();
+    try(ResultSet results = connector.executeQuery("SELECT username, Balance FROM " + table + ";", new Object[]{})) {
+
+      while(results.next()) {
+        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+      }
+
+    } catch(Exception ignore) {
+
+    }
   }
 
   @Override
