@@ -20,7 +20,10 @@ package net.tnemc.conversion;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import net.tnemc.core.TNECore;
+import net.tnemc.core.config.DataConfig;
 import net.tnemc.core.io.storage.SQLEngine;
+import net.tnemc.core.io.storage.StorageManager;
 import net.tnemc.core.io.storage.connect.SQLConnector;
 
 import java.io.File;
@@ -67,14 +70,15 @@ public class ConfigurableSQLConnector extends SQLConnector {
 
     if(sourceClass != null) {
       config.setDataSourceClassName(sourceClass);
+    } else {
+      config.setDriverClassName(driverClass);
     }
 
+    final String url = engine.url(dbFile.getAbsolutePath(), host, port, db);
+
     //String file, String host, int port, String database
-    config.addDataSourceProperty("url",
-            engine.url(
-                    dbFile.getAbsolutePath(),
-                    host, port, db
-            ));
+    config.addDataSourceProperty("url", url);
+    config.setJdbcUrl(url);
 
     config.addDataSourceProperty("user",  user);
     config.addDataSourceProperty("password",  password);

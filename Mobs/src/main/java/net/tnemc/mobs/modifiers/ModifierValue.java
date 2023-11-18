@@ -21,6 +21,9 @@ package net.tnemc.mobs.modifiers;
 import net.tnemc.core.account.holdings.modify.HoldingsOperation;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.Random;
 
 /**
  * ModifierValue represents an entry value for a modifier. This could be a range, or a flat value.
@@ -82,14 +85,14 @@ public class ModifierValue {
     }
   }
 
-  public double value() {
+  public BigDecimal value() {
     if(value == 0.0) {
-      //TODO: Random range.
+      return BigDecimal.valueOf(new Random().nextDouble(min, (max + .01))).setScale(2, RoundingMode.FLOOR);
     }
-    return value;
+    return BigDecimal.valueOf(value);
   }
 
   public BigDecimal modify(final BigDecimal amount) {
-    return operation.perform(amount, BigDecimal.valueOf(value()));
+    return operation.perform(amount, value());
   }
 }

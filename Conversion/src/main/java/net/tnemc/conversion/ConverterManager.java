@@ -20,6 +20,7 @@ import net.tnemc.conversion.impl.CMI;
 import net.tnemc.conversion.impl.Essentials;
 import net.tnemc.conversion.impl.GemsEconomy;
 import net.tnemc.conversion.impl.XConomy;
+import net.tnemc.core.module.ModuleInfo;
 
 import java.util.*;
 

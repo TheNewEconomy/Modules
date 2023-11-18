@@ -12,6 +12,8 @@ import net.tnemc.core.currency.Currency;
 import net.tnemc.core.io.storage.SQLEngine;
 import net.tnemc.core.io.storage.connect.SQLConnector;
 import net.tnemc.core.io.storage.engine.sql.MySQL;
+import net.tnemc.core.io.storage.engine.sql.SQLite;
+import net.tnemc.paper.TNE;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
@@ -85,6 +87,43 @@ public class XConomy extends Converter {
 
     } catch(Exception ignore) {
 
+    }
+  }
+
+  @Override
+  public void sqlite() throws InvalidDatabaseImport {
+    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+
+    final SQLEngine engine = new SQLite();
+    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(TNECore.directory(), "../XConomy/playerdata/data.db"),
+            config.getString("MySQL.host"), config.getInt("MySQL.port"), config.getString("MySQL.database"), config.getString("MySQL.user"), config.getString("MySQL.pass"));
+
+    connector.initialize();
+    try(ResultSet results = connector.executeQuery("SELECT UID,player,balance FROM xconomy;", new Object[]{})) {
+
+      while(results.next()) {
+
+        System.out.println("Converting Player: " + results.getString("player"));
+        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+      }
+
+    } catch(Exception ignore) {
+      ignore.printStackTrace();
+    }
+
+    try(ResultSet results = connector.executeQuery("SELECT account,balance FROM xconomynon;", new Object[]{})) {
+
+      while(results.next()) {
+
+        final String name = results.getString("account");
+
+        System.out.println("Converting NonPlayer: " + name);
+
+        ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+      }
+
+    } catch(Exception ignore) {
+      ignore.printStackTrace();
     }
   }
 }

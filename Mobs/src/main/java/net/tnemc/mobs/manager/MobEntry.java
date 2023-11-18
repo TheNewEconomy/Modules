@@ -1,4 +1,4 @@
-package net.tnemc.mobs.compatibility;
+package net.tnemc.mobs.manager;
 
 /*
  * The New Economy
@@ -19,10 +19,49 @@ package net.tnemc.mobs.compatibility;
  */
 
 /**
- * EntityKilledHandler
+ * MobEntry
  *
  * @author creatorfromhell
  * @since 0.1.0.0
  */
-public class EntityKilledHandler {
+public class MobEntry {
+
+  private String type = "";
+
+  private boolean tamed = false;
+  private boolean baby = false;
+  private String owner = "";
+
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public boolean isTamed() {
+    return tamed;
+  }
+
+  public void setTamed(boolean tamed) {
+    this.tamed = tamed;
+  }
+
+  public boolean isBaby() {
+    return baby;
+  }
+
+  public void setBaby(boolean baby) {
+    this.baby = baby;
+  }
+
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
 }

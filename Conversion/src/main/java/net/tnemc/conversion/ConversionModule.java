@@ -99,7 +99,6 @@ public class ConversionModule implements Module {
   public void registerCommands(CommandHandler command) {
     command.getAutoCompleter().registerParameterSuggestions(Converter.class, new ConverterSuggestion());
     command.registerValueResolver(Converter.class, new ConverterResolver());
-
   }
 
   @Override
