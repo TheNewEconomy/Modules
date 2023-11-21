@@ -79,9 +79,8 @@ public class ConfigurableSQLConnector extends SQLConnector {
     //String file, String host, int port, String database
     config.addDataSourceProperty("url", url);
     config.setJdbcUrl(url);
-
-    config.addDataSourceProperty("user",  user);
-    config.addDataSourceProperty("password",  password);
+    config.setUsername(user);
+    config.setPassword(password);
 
     config.setPoolName(poolName);
     config.setConnectionTestQuery("SELECT 1");

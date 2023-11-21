@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Set;
 import java.util.UUID;
@@ -99,27 +101,36 @@ public class XConomy extends Converter {
             config.getString("MySQL.host"), config.getInt("MySQL.port"), config.getString("MySQL.database"), config.getString("MySQL.user"), config.getString("MySQL.pass"));
 
     connector.initialize();
-    try(ResultSet results = connector.executeQuery("SELECT UID,player,balance FROM xconomy;", new Object[]{})) {
+    try {
+      final Connection connection = connector.connection();
+      final PreparedStatement statement = connection.prepareStatement("SELECT UID,player,balance FROM xconomy;");
+      final ResultSet results = statement.executeQuery();
 
       while(results.next()) {
 
-        System.out.println("Converting Player: " + results.getString("player"));
         ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
       }
 
+      if(results != null) {
+        results.close();
+      }
     } catch(Exception ignore) {
-      ignore.printStackTrace();
     }
 
-    try(ResultSet results = connector.executeQuery("SELECT account,balance FROM xconomynon;", new Object[]{})) {
+    try {
+      final Connection connection = connector.connection();
+      final PreparedStatement statement = connection.prepareStatement("SELECT account,balance FROM xconomynon;");
+      final ResultSet results = statement.executeQuery();
 
       while(results.next()) {
 
         final String name = results.getString("account");
 
-        System.out.println("Converting NonPlayer: " + name);
-
         ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+      }
+
+      if(results != null) {
+        results.close();
       }
 
     } catch(Exception ignore) {
