@@ -22,6 +22,11 @@ Mobs:
     #Modifier for when a baby form of the mob is killed.
     Baby: 0.5
 
+    Weather:
+
+      Storm: 2.0
+      Clear: 1.0
+
     #Modifiers for aggressiveness.
     Aggression:
 

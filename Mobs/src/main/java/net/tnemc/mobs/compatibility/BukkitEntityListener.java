@@ -51,6 +51,7 @@ public class BukkitEntityListener implements Listener {
 
     final MobEntry entry = new MobEntry();
 
+    final String weather = (mob.getWorld().isClearWeather())? "Clear" : "Storm";
     final String mobType = mob.getType().name().toLowerCase().replace("_", "");
     final boolean isBaby = mob instanceof Ageable && !((Ageable) mob).isAdult();
     final String weaponMaterial = getWeaponMaterial(player);
