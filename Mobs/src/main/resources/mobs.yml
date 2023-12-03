@@ -46,3 +46,317 @@ Mobs:
 
       #Modifier example for material multipliers.
       DIAMOND_SWORD: 0.8
+
+  Rewards:
+
+    sheep:
+      Currency: "Default"
+      Reward: "1.0"
+
+    cow:
+      Currency: "Default"
+      Reward: "1.0"
+
+    fox:
+      Currency: "Default"
+      Reward: "1.0"
+
+    bat:
+      Currency: "Default"
+      Reward: "1.0"
+
+    chicken:
+      Currency: "Default"
+      Reward: "1.0"
+
+    cod:
+      Currency: "Default"
+      Reward: "1.0"
+
+    ocelot:
+      Currency: "Default"
+      Reward: "1.0"
+
+    pig:
+      Currency: "Default"
+      Reward: "1.0"
+
+    babypiglin:
+      Currency: "Default"
+      Reward: "1.0"
+
+    babypolarbear:
+      Currency: "Default"
+      Reward: "1.0"
+
+    snowgolem:
+      Currency: "Default"
+      Reward: "1.0"
+
+    rabbit:
+      Currency: "Default"
+      Reward: "1.0"
+
+    salmon:
+      Currency: "Default"
+      Reward: "1.0"
+
+    mooshroom:
+      Currency: "Default"
+      Reward: "1.0"
+
+    squid:
+      Currency: "Default"
+      Reward: "1.0"
+
+    strider:
+      Currency: "Default"
+      Reward: "1.0"
+
+    tropicalfish:
+      Currency: "Default"
+      Reward: "1.0"
+
+    turtle:
+      Currency: "Default"
+      Reward: "1.0"
+
+    villager:
+      Currency: "Default"
+      Reward: "1.0"
+
+    wanderingtrader:
+      Currency: "Default"
+      Reward: "1.0"
+
+    pufferfish:
+      Currency: "Default"
+      Reward: "1.0"
+
+    axolotl:
+      Currency: "Default"
+      Reward: "1.0"
+
+    glowsquid:
+      Currency: "Default"
+      Reward: "1.0"
+
+    frog:
+      Currency: "Default"
+      Reward: "1.0"
+
+    donkey:
+      Currency: "Default"
+      Reward: "1.0"
+
+    horse:
+      Currency: "Default"
+      Reward: "1.0"
+
+    cat:
+      Currency: "Default"
+      Reward: "1.0"
+
+    parrot:
+      Currency: "Default"
+      Reward: "1.0"
+
+    mule:
+      Currency: "Default"
+      Reward: "1.0"
+
+    skeletonhorse:
+      Currency: "Default"
+      Reward: "1.0"
+
+    illager:
+      Currency: "Default"
+      Reward: "1.0"
+
+    dolphin:
+      Currency: "Default"
+      Reward: "1.0"
+
+    polarbear:
+      Currency: "Default"
+      Reward: "1.0"
+
+    traderllama:
+      Currency: "Default"
+      Reward: "1.0"
+
+    llama:
+      Currency: "Default"
+      Reward: "1.0"
+
+    panda:
+      Currency: "Default"
+      Reward: "1.0"
+
+    wolf:
+      Currency: "Default"
+      Reward: "1.0"
+
+    bee:
+      Currency: "Default"
+      Reward: "1.0"
+
+    irongolem:
+      Currency: "Default"
+      Reward: "1.0"
+
+    goat:
+      Currency: "Default"
+      Reward: "1.0"
+
+    spider:
+      Currency: "Default"
+      Reward: "1.0"
+
+    cavespider:
+      Currency: "Default"
+      Reward: "1.0"
+
+    enderman:
+      Currency: "Default"
+      Reward: "1.0"
+
+    zombiepigman:
+      Currency: "Default"
+      Reward: "1.0"
+
+    piglin:
+      Currency: "Default"
+      Reward: "1.0"
+
+    zombifiedpiglin:
+      Currency: "Default"
+      Reward: "1.0"
+
+    evoker:
+      Currency: "Default"
+      Reward: "1.0"
+
+    vindicator:
+      Currency: "Default"
+      Reward: "1.0"
+
+    pillager:
+      Currency: "Default"
+      Reward: "1.0"
+
+    ravager:
+      Currency: "Default"
+      Reward: "1.0"
+
+    ravagerjockey:
+      Currency: "Default"
+      Reward: "1.0"
+
+    vex:
+      Currency: "Default"
+      Reward: "1.0"
+
+    chickenjockey:
+      Currency: "Default"
+      Reward: "1.0"
+
+    endermite:
+      Currency: "Default"
+      Reward: "1.0"
+
+    guardian:
+      Currency: "Default"
+      Reward: "1.0"
+
+    elderguardian:
+      Currency: "Default"
+      Reward: "1.0"
+
+    shulker:
+      Currency: "Default"
+      Reward: "1.0"
+
+    skeletonhorseman:
+      Currency: "Default"
+      Reward: "1.0"
+
+    husk:
+      Currency: "Default"
+      Reward: "1.0"
+
+    stray:
+      Currency: "Default"
+      Reward: "1.0"
+
+    phantom:
+      Currency: "Default"
+      Reward: "1.0"
+
+    blaze:
+      Currency: "Default"
+      Reward: "1.0"
+
+    creeper:
+      Currency: "Default"
+      Reward: "1.0"
+
+    ghast:
+      Currency: "Default"
+      Reward: "1.0"
+
+    magmacube:
+      Currency: "Default"
+      Reward: "1.0"
+
+    silverfish:
+      Currency: "Default"
+      Reward: "1.0"
+
+    skeleton:
+      Currency: "Default"
+      Reward: "1.0"
+
+    minecraftslime:
+      Currency: "Default"
+      Reward: "1.0"
+
+    spiderjockey:
+      Currency: "Default"
+      Reward: "1.0"
+
+    zombie:
+      Currency: "Default"
+      Reward: "1.0"
+
+    zombievillager:
+      Currency: "Default"
+      Reward: "1.0"
+
+    drowned:
+      Currency: "Default"
+      Reward: "1.0"
+
+    witherskeleton:
+      Currency: "Default"
+      Reward: "1.0"
+
+    witch:
+      Currency: "Default"
+      Reward: "1.0"
+
+    hoglin:
+      Currency: "Default"
+      Reward: "1.0"
+
+    zoglin:
+      Currency: "Default"
+      Reward: "1.0"
+
+    piglinbrute:
+      Currency: "Default"
+      Reward: "1.0"
+
+    warden:
+      Currency: "Default"
+      Reward: "1.0"

@@ -18,8 +18,13 @@ package net.tnemc.mobs.compatibility;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import net.tnemc.mobs.MobsModule;
 import net.tnemc.mobs.manager.MobEntry;
+import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,26 +41,58 @@ import java.util.UUID;
 public class BukkitEntityListener implements Listener {
 
   @EventHandler
-  public void onKilled(final EntityDeathEvent event) {
+  public void onMobKill(EntityDeathEvent event) {
+    LivingEntity mob = event.getEntity();
+    Player player = mob.getKiller();
 
-    if(event.getEntity().getKiller() == null) {
+    if(player == null) {
       return;
     }
 
     final MobEntry entry = new MobEntry();
 
-    final String player = event.getEntity().getKiller().getUniqueId().toString();
-    if(event.getEntity() instanceof Tameable tameable) {
+    final String mobType = mob.getType().name().toLowerCase().replace("_", "");
+    final boolean isBaby = mob instanceof Ageable && !((Ageable) mob).isAdult();
+    final String weaponMaterial = getWeaponMaterial(player);
+    final String aggressionType = getAggressionType(mobType);
+    final String timeOfDay = getTimeOfDay(mob.getWorld().getTime());
+    final boolean isOwned = mob instanceof Tameable && ((Tameable) mob).isTamed();
+    final boolean isPlayerOwner = isOwned && player.getUniqueId().equals(((Tameable) mob).getOwner().getUniqueId());
+  }
 
-      entry.setTamed(tameable.isTamed());
-
-      if(tameable.getOwner() != null) {
-        entry.setOwner(tameable.getOwner().getUniqueId().toString());
-      }
+  private String getWeaponMaterial(Player player) {
+    if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+      return "FIST";
+    } else {
+      return player.getInventory().getItemInMainHand().getType().name();
     }
+  }
 
-    if(event.getEntity() instanceof Ageable ageable) {
-      entry.setBaby(!ageable.isAdult());
+  private String getAggressionType(final String name) {
+    if(MobsModule.passive.contains(name)) {
+      return "Passive";
+    } else if(MobsModule.hostile.contains(name)) {
+      return "Hostile";
+    } else {
+      return "Neutral";
+    }
+  }
+
+  private String getTimeOfDay(long time) {
+    if(time >= 0 && time < 3000) {
+      return "Night";
+    } else if(time < 6000) {
+      return "Sunrise";
+    } else if(time < 12000) {
+      return "Morning";
+    } else if(time < 13000) {
+      return "Midday";
+    } else if(time < 18000) {
+      return "Afternoon";
+    } else if(time < 19000) {
+      return "Sunset";
+    } else {
+      return "Evening";
     }
   }
 }

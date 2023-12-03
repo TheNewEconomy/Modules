@@ -41,6 +41,10 @@ import java.util.List;
 //https://tnemc.net/files/module-version.xml
 public class MobsModule implements Module {
 
+  public static final List<String> passive = new ArrayList<>();
+  public static final List<String> neutral = new ArrayList<>();
+  public static final List<String> hostile = new ArrayList<>();
+
   public void enableListeners() {
     switch (TNECore.server().name().toLowerCase()) {
       case "sponge":
