@@ -49,16 +49,24 @@ public class BukkitEntityListener implements Listener {
       return;
     }
 
-    final MobEntry entry = new MobEntry();
+    final String type = mob.getType().name().toLowerCase().replace("_", "");
 
     final String weather = (mob.getWorld().isClearWeather())? "Clear" : "Storm";
-    final String mobType = mob.getType().name().toLowerCase().replace("_", "");
     final boolean isBaby = mob instanceof Ageable && !((Ageable) mob).isAdult();
     final String weaponMaterial = getWeaponMaterial(player);
-    final String aggressionType = getAggressionType(mobType);
+    final String aggressionType = getAggressionType(type);
     final String timeOfDay = getTimeOfDay(mob.getWorld().getTime());
     final boolean isOwned = mob instanceof Tameable && ((Tameable) mob).isTamed();
     final boolean isPlayerOwner = isOwned && player.getUniqueId().equals(((Tameable) mob).getOwner().getUniqueId());
+
+    final MobEntry entry = new MobEntry(type, player.getUniqueId());
+    entry.setWeather(weather);
+    entry.setBaby(isBaby);
+    entry.setWeaponMaterial(weaponMaterial);
+    entry.setAggressionType(aggressionType);
+    entry.setTimeOfDay(timeOfDay);
+    entry.setOwned(isOwned);
+    entry.setPlayerOwner(isPlayerOwner);
   }
 
   private String getWeaponMaterial(Player player) {
