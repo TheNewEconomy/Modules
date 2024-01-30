@@ -78,12 +78,6 @@
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
-            <artifactId>Paper</artifactId>
-            <version>0.1.2.1-Pre-2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.tnemc</groupId>
             <artifactId>Sponge8Core</artifactId>
             <version>0.1.2.1-Pre-2</version>
             <scope>provided</scope>

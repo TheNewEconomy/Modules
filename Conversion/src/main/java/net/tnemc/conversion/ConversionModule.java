@@ -18,15 +18,11 @@ package net.tnemc.conversion;
  */
 
 import net.tnemc.conversion.command.platform.BukkitConvert;
-import net.tnemc.conversion.command.platform.PaperConvert;
 import net.tnemc.conversion.command.platform.SpongeConvert;
 import net.tnemc.conversion.command.resolvers.ConverterResolver;
 import net.tnemc.conversion.command.resolvers.ConverterSuggestion;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.command.parameters.resolver.CurrencyResolver;
-import net.tnemc.core.command.parameters.suggestion.CurrencySuggestion;
 import net.tnemc.core.compatibility.log.DebugLevel;
-import net.tnemc.core.currency.Currency;
 import net.tnemc.core.io.storage.StorageManager;
 import net.tnemc.core.module.Module;
 import net.tnemc.core.module.ModuleInfo;
@@ -115,7 +111,6 @@ public class ConversionModule implements Module {
   public List<OrphanCommand> registerAdminSub() {
 
     switch (TNECore.server().name().toLowerCase()) {
-      case "paper" -> TNECore.instance().command().register(Orphans.path("tne").handler(new PaperConvert()));
       case "sponge" -> TNECore.instance().command().register(Orphans.path("tne").handler(new SpongeConvert()));
       default -> TNECore.instance().command().register(Orphans.path("tne").handler(new BukkitConvert()));
     }

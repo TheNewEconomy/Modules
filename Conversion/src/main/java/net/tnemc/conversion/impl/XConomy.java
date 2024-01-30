@@ -1,29 +1,22 @@
 package net.tnemc.conversion.impl;
 
-import me.yic.xconomy.XConomyLoad;
-import me.yic.xconomy.data.DataCon;
 import net.tnemc.conversion.ConfigurableSQLConnector;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.compatibility.log.DebugLevel;
 import net.tnemc.core.currency.Currency;
 import net.tnemc.core.io.storage.SQLEngine;
 import net.tnemc.core.io.storage.connect.SQLConnector;
 import net.tnemc.core.io.storage.engine.sql.MySQL;
 import net.tnemc.core.io.storage.engine.sql.SQLite;
-import net.tnemc.paper.TNE;
-import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Set;
 import java.util.UUID;
 
 /**
