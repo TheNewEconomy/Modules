@@ -18,7 +18,7 @@ package net.tnemc.mobs.modifiers;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import net.tnemc.mobs.compatibility.EntityKilledHandler;
+import net.tnemc.mobs.manager.MobEntry;
 
 import java.math.BigDecimal;
 
@@ -32,8 +32,8 @@ public interface Modifier {
 
   /**
    * Used to apply the modifier
-   * @param handler
-   * @return
+   * @param entry The {@link MobEntry entry} that we're using to apply this modifier.
+   * @return The modifier amount that should be applied to this entry.
    */
-  BigDecimal apply(final EntityKilledHandler handler);
+  BigDecimal apply(final MobEntry entry);
 }

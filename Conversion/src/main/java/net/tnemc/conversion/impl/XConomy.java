@@ -10,8 +10,10 @@ import net.tnemc.core.io.storage.SQLEngine;
 import net.tnemc.core.io.storage.connect.SQLConnector;
 import net.tnemc.core.io.storage.engine.sql.MySQL;
 import net.tnemc.core.io.storage.engine.sql.SQLite;
+import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -54,6 +56,14 @@ public class XConomy extends Converter {
 
   @Override
   public void mysql() throws InvalidDatabaseImport {
+    final File mainConfig = new File(TNECore.directory(), "../XConomy/config.yml");
+    YamlFile mainYaml = null;
+    try {
+      mainYaml = YamlFile.loadConfiguration(mainConfig, true);
+    } catch(IOException ignore) {
+    }
+
+
     final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
 
     final SQLEngine engine = new MySQL();
@@ -71,22 +81,31 @@ public class XConomy extends Converter {
 
     }
 
-    try(ResultSet results = connector.executeQuery("SELECT account,UUID,balance FROM xconomynon;", new Object[]{})) {
+    if(mainYaml != null && mainYaml.getBoolean("non-player-account.enable", false)) {
+      try(ResultSet results = connector.executeQuery("SELECT account,UUID,balance FROM xconomynon;", new Object[]{})) {
 
-      while(results.next()) {
+        while(results.next()) {
 
-        final String name = results.getString("account");
+          final String name = results.getString("account");
 
-        ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+          ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+        }
+
+      } catch(Exception ignore) {
+
       }
-
-    } catch(Exception ignore) {
-
     }
   }
 
   @Override
   public void sqlite() throws InvalidDatabaseImport {
+    final File mainConfig = new File(TNECore.directory(), "../XConomy/config.yml");
+    YamlFile mainYaml = null;
+    try {
+      mainYaml = YamlFile.loadConfiguration(mainConfig, true);
+    } catch(IOException ignore) {
+    }
+
     final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
 
     final SQLEngine engine = new SQLite();
@@ -110,24 +129,27 @@ public class XConomy extends Converter {
     } catch(Exception ignore) {
     }
 
-    try {
-      final Connection connection = connector.connection();
-      final PreparedStatement statement = connection.prepareStatement("SELECT account,balance FROM xconomynon;");
-      final ResultSet results = statement.executeQuery();
 
-      while(results.next()) {
+    if(mainYaml != null && mainYaml.getBoolean("non-player-account.enable", false)) {
+      try {
+        final Connection connection = connector.connection();
+        final PreparedStatement statement = connection.prepareStatement("SELECT account,balance FROM xconomynon;");
+        final ResultSet results = statement.executeQuery();
 
-        final String name = results.getString("account");
+        while(results.next()) {
 
-        ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+          final String name = results.getString("account");
+
+          ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+        }
+
+        if(results != null) {
+          results.close();
+        }
+
+      } catch(Exception ignore) {
+        ignore.printStackTrace();
       }
-
-      if(results != null) {
-        results.close();
-      }
-
-    } catch(Exception ignore) {
-      ignore.printStackTrace();
     }
   }
 }
