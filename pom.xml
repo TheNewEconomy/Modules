@@ -13,6 +13,7 @@
         <module>GroupAccount</module>
         <module>Jobs</module>
         <module>Banks</module>
+        <module>Vaults</module>
     </modules>
 
     <properties>
