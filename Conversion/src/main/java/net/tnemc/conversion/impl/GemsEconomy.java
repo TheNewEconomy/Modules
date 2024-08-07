@@ -1,13 +1,13 @@
 package net.tnemc.conversion.impl;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.compatibility.log.DebugLevel;
 import net.tnemc.core.currency.Currency;
-import org.simpleyaml.configuration.ConfigurationSection;
-import org.simpleyaml.configuration.file.YamlFile;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.compatibility.log.DebugLevel;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class GemsEconomy extends Converter {
 
   @Override
   public File dataFolder() {
-    return new File(TNECore.directory(), "../GemsEconomy/config.yml");
+    return new File(PluginCore.directory(), "../GemsEconomy/config.yml");
   }
 
   @Override
@@ -62,13 +62,13 @@ public class GemsEconomy extends Converter {
         ResultSet results = statement.executeQuery("SELECT * FROM " + table + ";")) {
 
       while(results.next()) {
-        Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+        Currency cur = TNECore.eco().currency().getDefaultCurrency(PluginCore.server().defaultRegion(TNECore.eco().region().getMode()));
         final Optional<Currency> curOptional = TNECore.eco().currency().findCurrency(results.getString("currency_id"));
         if(curOptional.isPresent()) {
           cur = curOptional.get();
         }
         ConversionModule.convertedAdd(results.getString("account_id"),
-            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(),
+            PluginCore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(),
             BigDecimal.valueOf(results.getDouble("balance")));
       }
     } catch(SQLException ignore) {}
@@ -77,9 +77,9 @@ public class GemsEconomy extends Converter {
 
   @Override
   public void yaml() throws InvalidDatabaseImport {
-    final File dataFile = new File(TNECore.directory(), "../GemsEconomy/data.yml");
+    final File dataFile = new File(PluginCore.directory(), "../GemsEconomy/data.yml");
     try {
-      final YamlFile dataConfiguration = YamlFile.loadConfiguration(dataFile);
+      final YamlDocument dataConfiguration = YamlDocument.create(dataFile);
 
       final ConfigurationSection accountSection = dataConfiguration.getConfigurationSection("accounts");
       if(accountSection != null) {
@@ -89,7 +89,7 @@ public class GemsEconomy extends Converter {
           if(balanceSection != null) {
             final Set<String> currencies = balanceSection.getKeys(false);
             for(String currency : currencies) {
-              Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+              Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.eco().region().defaultRegion());
               final Optional<Currency> curOptional = TNECore.eco().currency().findCurrency(currency);
               if(curOptional.isPresent()) {
                 cur = curOptional.get();
@@ -102,13 +102,13 @@ public class GemsEconomy extends Converter {
                 System.out.println("Couldn't parse balance value for node: " + "accounts." + uuid + ".balances." + currency + ". This balance will have to be manually converted using /money give");
               }
 
-              ConversionModule.convertedAdd(UUID.fromString(uuid), "", TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), value);
+              ConversionModule.convertedAdd(UUID.fromString(uuid), "", TNECore.eco().region().defaultRegion(), cur.getUid(), value);
             }
           }
         }
       }
     } catch (IOException e) {
-      TNECore.log().error("Failed to convert GemsEconomy.", e, DebugLevel.STANDARD);
+      PluginCore.log().error("Failed to convert GemsEconomy.", e, DebugLevel.STANDARD);
     }
   }
 }

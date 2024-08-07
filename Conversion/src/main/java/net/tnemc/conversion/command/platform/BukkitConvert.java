@@ -16,7 +16,6 @@ package net.tnemc.conversion.command.platform;/*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import net.tnemc.bukkit.impl.BukkitCMDSource;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.command.ConvertCommand;
 import net.tnemc.libs.lamp.commands.annotation.Description;
@@ -25,6 +24,7 @@ import net.tnemc.libs.lamp.commands.annotation.Usage;
 import net.tnemc.libs.lamp.commands.bukkit.BukkitCommandActor;
 import net.tnemc.libs.lamp.commands.bukkit.annotation.CommandPermission;
 import net.tnemc.libs.lamp.commands.orphan.OrphanCommand;
+import net.tnemc.plugincore.bukkit.impl.BukkitCMDSource;
 
 /**
  * Bukkit

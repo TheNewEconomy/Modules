@@ -50,7 +50,7 @@ public class ModifierValue {
     } else if(value.startsWith("\\=")) {
 
       operation = HoldingsOperation.DIVIDE;
-      working = working.replaceAll("\\=", "");
+      working = working.replaceAll("=", "");
 
     } else if(value.startsWith("+=")) {
 

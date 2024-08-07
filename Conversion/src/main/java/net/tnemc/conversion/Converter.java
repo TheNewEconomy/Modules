@@ -1,10 +1,10 @@
 package net.tnemc.conversion;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.compatibility.log.DebugLevel;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.compatibility.log.DebugLevel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,18 +37,18 @@ import java.util.Map;
  */
 public abstract class Converter {
   protected final File configFile;
-  protected YamlFile config = null;
+  protected YamlDocument config = null;
 
   //TODO: Initialize a storage manager instance for conversion.
 
   public Converter(@NotNull final String configLocation) {
     if(!configLocation.trim().equalsIgnoreCase("")) {
-      configFile = new File(TNECore.directory(), configLocation);
+      configFile = new File(PluginCore.directory(), configLocation);
       if(configFile.exists()) {
         try {
-          config = YamlFile.loadConfiguration(configFile, true);
+          config = YamlDocument.create(configFile);
         } catch (IOException e) {
-          TNECore.log().error("Error while attempting to load conversion config.", e, DebugLevel.STANDARD);
+          PluginCore.log().error("Error while attempting to load conversion config.", e, DebugLevel.STANDARD);
         }
       }
     } else {
@@ -82,9 +82,9 @@ public abstract class Converter {
 
   public void convert() {
     try {
-      new File(TNECore.directory(), "extracted.yml").createNewFile();
+      new File(PluginCore.directory(), "extracted.yml").createNewFile();
     } catch(Exception e) {
-      TNECore.log().error("Something went wrong with conversion.", e, DebugLevel.STANDARD);
+      PluginCore.log().error("Something went wrong with conversion.", e, DebugLevel.STANDARD);
     }
     try {
       switch (type().toLowerCase()) {
@@ -99,7 +99,7 @@ public abstract class Converter {
         case "experience" -> expDB();
       }
     } catch(InvalidDatabaseImport exception) {
-      TNECore.log().error("Something went wrong with conversion.", exception, DebugLevel.STANDARD);
+      PluginCore.log().error("Something went wrong with conversion.", exception, DebugLevel.STANDARD);
     }
   }
 

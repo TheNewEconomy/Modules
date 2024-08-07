@@ -20,16 +20,10 @@ package net.tnemc.conversion;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import net.tnemc.core.TNECore;
-import net.tnemc.core.config.DataConfig;
-import net.tnemc.core.io.storage.SQLEngine;
-import net.tnemc.core.io.storage.StorageManager;
-import net.tnemc.core.io.storage.connect.SQLConnector;
+import net.tnemc.plugincore.core.io.storage.SQLEngine;
+import net.tnemc.plugincore.core.io.storage.connect.SQLConnector;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**

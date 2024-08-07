@@ -6,14 +6,18 @@ import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
 import net.tnemc.core.currency.Currency;
-import net.tnemc.core.io.storage.SQLEngine;
-import net.tnemc.core.io.storage.connect.SQLConnector;
-import net.tnemc.core.io.storage.engine.sql.MySQL;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.io.storage.SQLEngine;
+import net.tnemc.plugincore.core.io.storage.connect.SQLConnector;
+import net.tnemc.plugincore.core.io.storage.engine.sql.MySQL;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.UUID;
 
 /**
@@ -44,50 +48,27 @@ public class CMI extends Converter {
 
   @Override
   public File dataFolder() {
-    return new File(TNECore.directory(), "../CMI/dataBaseInfo.yml");
+    return new File(PluginCore.directory(), "../CMI/dataBaseInfo.yml");
   }
 
   @Override
   public void mysql() throws InvalidDatabaseImport {
 
-    /*final String prefix = config.getString("mysql.tablePrefix");
-    final String table = prefix + "users";
-    final String[] workHost = config.getString("mysql.hostname").split(":");
-
-    initialize(new TNEDataManager(type(), workHost[0],
-        Integer.valueOf(workHost[1]), config.getString("mysql.database"),
-        config.getString("mysql.username"), config.getString("mysql.password"),
-        prefix, "cmi.sqlite",
-        false, false, 60, false));
-    open();
-    try(Connection connection = db.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet results = statement.executeQuery("SELECT username, Balance FROM " + table + ";")) {
-
-      final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
-      while(results.next()) {
-        ConversionModule.convertedAdd(results.getString("username"),
-            TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(),
-            BigDecimal.valueOf(results.getDouble("Balance")));
-      }
-    } catch(SQLException ignore) {}
-    close();*/
-
-    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.eco().region().defaultRegion());
 
     final String prefix = config.getString("mysql.tablePrefix");
     final String table = prefix + "users";
     final String[] workHost = config.getString("mysql.hostname").split(":");
 
     final SQLEngine engine = new MySQL();
-    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(TNECore.directory(), "../CMI/cmi.sqlite.db"),
+    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(PluginCore.directory(), "../CMI/cmi.sqlite.db"),
             workHost[0], Integer.valueOf(workHost[1]), config.getString("mysql.database"), config.getString("mysql.username"), config.getString("mysql.password"));
 
     connector.initialize();
     try(ResultSet results = connector.executeQuery("SELECT username, Balance FROM " + table + ";", new Object[]{})) {
 
       while(results.next()) {
-        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.eco().region().defaultRegion(), cur.getUid(), new BigDecimal(results.getString("balance")));
       }
 
     } catch(Exception ignore) {
@@ -101,19 +82,18 @@ public class CMI extends Converter {
 
       Class.forName("org.sqlite.JDBC");
 
-      try(Connection connection = DriverManager.getConnection("jdbc:sqlite:" + new File(TNECore.directory(), "../CMI/cmi.sqlite.db").getAbsolutePath());
+      try(Connection connection = DriverManager.getConnection("jdbc:sqlite:" + new File(PluginCore.directory(), "../CMI/cmi.sqlite.db").getAbsolutePath());
           Statement statement = connection.createStatement();
           ResultSet results = statement.executeQuery("SELECT username, Balance FROM users;")) {
 
-        final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+        final Currency currency = TNECore.eco().currency().getDefaultCurrency(TNECore.eco().region().defaultRegion());
         while(results.next()) {
           ConversionModule.convertedAdd(UUID.randomUUID(), results.getString("username"),
-              TNECore.server().defaultRegion(TNECore.eco().region().getMode()), currency.getUid(),
+              TNECore.eco().region().defaultRegion(), currency.getUid(),
               BigDecimal.valueOf(results.getDouble("Balance")));
         }
       } catch(SQLException ignore) {}
 
     } catch(Exception ignore) {}
-
   }
 }

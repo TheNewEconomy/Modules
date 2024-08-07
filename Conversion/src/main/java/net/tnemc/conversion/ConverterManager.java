@@ -20,9 +20,13 @@ import net.tnemc.conversion.impl.CMI;
 import net.tnemc.conversion.impl.Essentials;
 import net.tnemc.conversion.impl.GemsEconomy;
 import net.tnemc.conversion.impl.XConomy;
-import net.tnemc.core.module.ModuleInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * ConverterManager

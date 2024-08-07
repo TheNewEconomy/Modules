@@ -17,11 +17,13 @@ package net.tnemc.mobs;/*
  */
 
 import net.tnemc.core.TNECore;
-import net.tnemc.core.io.storage.StorageManager;
-import net.tnemc.core.module.Module;
-import net.tnemc.core.module.ModuleInfo;
 import net.tnemc.libs.lamp.commands.CommandHandler;
 import net.tnemc.libs.lamp.commands.orphan.OrphanCommand;
+import net.tnemc.menu.core.MenuHandler;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.io.storage.StorageManager;
+import net.tnemc.plugincore.core.module.Module;
+import net.tnemc.plugincore.core.module.ModuleInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class MobsModule implements Module {
   public static final List<String> hostile = new ArrayList<>();
 
   public void enableListeners() {
-    switch (TNECore.server().name().toLowerCase()) {
+    switch (PluginCore.server().name().toLowerCase()) {
       case "sponge":
         break;
       default:
@@ -55,12 +57,12 @@ public class MobsModule implements Module {
   }
 
   @Override
-  public void enable(TNECore tneCore) {
+  public void enable(PluginCore pluginCore) {
 
   }
 
   @Override
-  public void disable(TNECore tneCore) {
+  public void disable(PluginCore pluginCore) {
 
   }
 
@@ -81,6 +83,11 @@ public class MobsModule implements Module {
 
   @Override
   public void enableSave(StorageManager storageManager) {
+
+  }
+
+  @Override
+  public void enableMenu(MenuHandler menuHandler) {
 
   }
 

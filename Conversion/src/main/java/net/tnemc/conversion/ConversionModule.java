@@ -17,19 +17,21 @@ package net.tnemc.conversion;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import net.tnemc.conversion.command.platform.BukkitConvert;
 import net.tnemc.conversion.command.platform.SpongeConvert;
 import net.tnemc.conversion.command.resolvers.ConverterResolver;
 import net.tnemc.conversion.command.resolvers.ConverterSuggestion;
 import net.tnemc.core.TNECore;
-import net.tnemc.core.compatibility.log.DebugLevel;
-import net.tnemc.core.io.storage.StorageManager;
-import net.tnemc.core.module.Module;
-import net.tnemc.core.module.ModuleInfo;
 import net.tnemc.libs.lamp.commands.CommandHandler;
 import net.tnemc.libs.lamp.commands.orphan.OrphanCommand;
 import net.tnemc.libs.lamp.commands.orphan.Orphans;
-import org.simpleyaml.configuration.file.YamlFile;
+import net.tnemc.menu.core.MenuHandler;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.compatibility.log.DebugLevel;
+import net.tnemc.plugincore.core.io.storage.StorageManager;
+import net.tnemc.plugincore.core.module.Module;
+import net.tnemc.plugincore.core.module.ModuleInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,12 +64,12 @@ public class ConversionModule implements Module {
   }
 
   @Override
-  public void enable(TNECore core) {
-    TNECore.log().inform("Enabled conversion module!", DebugLevel.OFF);
+  public void enable(PluginCore pluginCore) {
+    PluginCore.log().inform("Enabled conversion module!", DebugLevel.OFF);
   }
 
   @Override
-  public void disable(TNECore core) {
+  public void disable(PluginCore pluginCore) {
 
   }
 
@@ -92,6 +94,11 @@ public class ConversionModule implements Module {
   }
 
   @Override
+  public void enableMenu(MenuHandler menuHandler) {
+
+  }
+
+  @Override
   public void registerCommands(CommandHandler command) {
     command.getAutoCompleter().registerParameterSuggestions(Converter.class, new ConverterSuggestion());
     command.registerValueResolver(Converter.class, new ConverterResolver());
@@ -110,7 +117,7 @@ public class ConversionModule implements Module {
   @Override
   public List<OrphanCommand> registerAdminSub() {
 
-    switch (TNECore.server().name().toLowerCase()) {
+    switch (PluginCore.server().name().toLowerCase()) {
       case "sponge" -> TNECore.instance().command().register(Orphans.path("tne").handler(new SpongeConvert()));
       default -> TNECore.instance().command().register(Orphans.path("tne").handler(new BukkitConvert()));
     }
@@ -119,12 +126,12 @@ public class ConversionModule implements Module {
   }
 
   public static void convertedAdd(final UUID id, String name, String world, UUID currency, BigDecimal amount) {
-    final File conversionFile = new File(TNECore.directory(), "extracted.yml");
-    final YamlFile conversion;
+    final File conversionFile = new File(PluginCore.directory(), "extracted.yml");
+    final YamlDocument conversion;
     try {
-      conversion = YamlFile.loadConfiguration(conversionFile);
+      conversion = YamlDocument.create(conversionFile);
     } catch(IOException e) {
-      TNECore.log().error("Error attempting to load extracted.yml during conversion");
+      PluginCore.log().error("Error attempting to load extracted.yml during conversion");
       return;
     }
 
@@ -133,8 +140,8 @@ public class ConversionModule implements Module {
       conversion.createSection("Accounts");
       try {
         conversion.save(conversionFile);
-      } catch (IOException e) {
-        e.printStackTrace();
+      } catch (IOException ignore) {
+        PluginCore.log().error("Error attempting to save extracted.yml during conversion");
       }
     }
 
@@ -155,7 +162,7 @@ public class ConversionModule implements Module {
     try {
       conversion.save();
     } catch (IOException e) {
-      TNECore.log().error("Error attempting to save extracted.yml during conversion");
+      PluginCore.log().error("Error attempting to save extracted.yml during conversion");
     }
   }
 

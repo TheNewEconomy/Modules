@@ -1,16 +1,18 @@
 package net.tnemc.conversion.impl;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import net.tnemc.conversion.ConfigurableSQLConnector;
 import net.tnemc.conversion.ConversionModule;
 import net.tnemc.conversion.Converter;
 import net.tnemc.conversion.InvalidDatabaseImport;
 import net.tnemc.core.TNECore;
 import net.tnemc.core.currency.Currency;
-import net.tnemc.core.io.storage.SQLEngine;
-import net.tnemc.core.io.storage.connect.SQLConnector;
-import net.tnemc.core.io.storage.engine.sql.MySQL;
-import net.tnemc.core.io.storage.engine.sql.SQLite;
-import org.simpleyaml.configuration.file.YamlFile;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.io.storage.SQLEngine;
+import net.tnemc.plugincore.core.io.storage.connect.SQLConnector;
+import net.tnemc.plugincore.core.io.storage.engine.sql.MySQL;
+import net.tnemc.plugincore.core.io.storage.engine.sql.SQLite;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,30 +53,30 @@ public class XConomy extends Converter {
 
   @Override
   public File dataFolder() {
-    return new File(TNECore.directory(), "../XConomy/");
+    return new File(PluginCore.directory(), "../XConomy/");
   }
 
   @Override
   public void mysql() throws InvalidDatabaseImport {
-    final File mainConfig = new File(TNECore.directory(), "../XConomy/config.yml");
-    YamlFile mainYaml = null;
+    final File mainConfig = new File(PluginCore.directory(), "../XConomy/config.yml");
+    YamlDocument mainYaml = null;
     try {
-      mainYaml = YamlFile.loadConfiguration(mainConfig, true);
+      mainYaml = YamlDocument.create(mainConfig);
     } catch(IOException ignore) {
     }
 
 
-    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.eco().region().defaultRegion());
 
     final SQLEngine engine = new MySQL();
-    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(TNECore.directory(), "../XConomy/" + config.getString("SQLite.path")),
+    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(PluginCore.directory(), "../XConomy/" + config.getString("SQLite.path")),
             config.getString("MySQL.host"), config.getInt("MySQL.port"), config.getString("MySQL.database"), config.getString("MySQL.user"), config.getString("MySQL.pass"));
 
     connector.initialize();
     try(ResultSet results = connector.executeQuery("SELECT UID,player,balance FROM xconomy;", new Object[]{})) {
 
       while(results.next()) {
-        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.eco().region().defaultRegion(), cur.getUid(), new BigDecimal(results.getString("balance")));
       }
 
     } catch(Exception ignore) {
@@ -88,7 +90,7 @@ public class XConomy extends Converter {
 
           final String name = results.getString("account");
 
-          ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+          ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.eco().region().defaultRegion(), cur.getUid(), new BigDecimal(results.getString("balance")));
         }
 
       } catch(Exception ignore) {
@@ -99,17 +101,17 @@ public class XConomy extends Converter {
 
   @Override
   public void sqlite() throws InvalidDatabaseImport {
-    final File mainConfig = new File(TNECore.directory(), "../XConomy/config.yml");
-    YamlFile mainYaml = null;
+    final File mainConfig = new File(PluginCore.directory(), "../XConomy/config.yml");
+    YamlDocument mainYaml = null;
     try {
-      mainYaml = YamlFile.loadConfiguration(mainConfig, true);
+      mainYaml = YamlDocument.create(mainConfig);
     } catch(IOException ignore) {
     }
 
-    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.server().defaultRegion(TNECore.eco().region().getMode()));
+    final Currency cur = TNECore.eco().currency().getDefaultCurrency(TNECore.eco().region().defaultRegion());
 
     final SQLEngine engine = new SQLite();
-    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(TNECore.directory(), "../XConomy/playerdata/data.db"),
+    final SQLConnector connector = new ConfigurableSQLConnector(engine, "TNEConvert", new File(PluginCore.directory(), "../XConomy/playerdata/data.db"),
             config.getString("MySQL.host"), config.getInt("MySQL.port"), config.getString("MySQL.database"), config.getString("MySQL.user"), config.getString("MySQL.pass"));
 
     connector.initialize();
@@ -120,7 +122,7 @@ public class XConomy extends Converter {
 
       while(results.next()) {
 
-        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+        ConversionModule.convertedAdd(UUID.fromString(results.getString("UID")), results.getString("player"), TNECore.eco().region().defaultRegion(), cur.getUid(), new BigDecimal(results.getString("balance")));
       }
 
       if(results != null) {
@@ -140,7 +142,7 @@ public class XConomy extends Converter {
 
           final String name = results.getString("account");
 
-          ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.server().defaultRegion(TNECore.eco().region().getMode()), cur.getUid(), new BigDecimal(results.getString("balance")));
+          ConversionModule.convertedAdd(UUID.nameUUIDFromBytes(("NonPlayer:" + name).getBytes(StandardCharsets.UTF_8)), name, TNECore.eco().region().defaultRegion(), cur.getUid(), new BigDecimal(results.getString("balance")));
         }
 
         if(results != null) {
@@ -148,7 +150,6 @@ public class XConomy extends Converter {
         }
 
       } catch(Exception ignore) {
-        ignore.printStackTrace();
       }
     }
   }

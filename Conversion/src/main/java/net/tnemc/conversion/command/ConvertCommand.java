@@ -17,12 +17,12 @@ package net.tnemc.conversion.command;/*
  */
 
 import net.tnemc.conversion.Converter;
-import net.tnemc.core.TNECore;
-import net.tnemc.core.compatibility.CmdSource;
-import net.tnemc.core.compatibility.scheduler.ChoreExecution;
-import net.tnemc.core.compatibility.scheduler.ChoreTime;
-import net.tnemc.core.io.message.MessageData;
 import net.tnemc.core.utils.Extractor;
+import net.tnemc.plugincore.PluginCore;
+import net.tnemc.plugincore.core.compatibility.CmdSource;
+import net.tnemc.plugincore.core.compatibility.scheduler.ChoreExecution;
+import net.tnemc.plugincore.core.compatibility.scheduler.ChoreTime;
+import net.tnemc.plugincore.core.io.message.MessageData;
 
 /**
  * ConvertCommand
@@ -39,7 +39,7 @@ public class ConvertCommand {
             return;
         }
 
-        TNECore.server().scheduler().createDelayedTask(()-> {
+        PluginCore.server().scheduler().createDelayedTask(()-> {
             converter.convert();
             sender.message(new MessageData( "Conversion has completed. Running restoration command."));
             Extractor.restore(0);

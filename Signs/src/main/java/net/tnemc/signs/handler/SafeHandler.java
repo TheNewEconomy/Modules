@@ -52,12 +52,12 @@ public class SafeHandler implements HoldingsHandler {
   public boolean setHoldings(Account account, String region, Currency currency, CurrencyType currencyType, BigDecimal amount) {
     account.getWallet().setHoldings(new HoldingsEntry(region, currency.getUid(), amount, identifier()));
 
-    if(account.isPlayer() && TNECore.server().online(account.getIdentifier())) {
+    if(account.isPlayer() && PluginCore.server().online(account.getIdentifier())) {
       final CalculationData<Object> data = new CalculationData<>((ItemCurrency)currency,
                                                                  ((PlayerAccount)account).getPlayer()
                                                                      .get().inventory().getInventory(false),
                                                                  ((PlayerAccount)account).getUUID());
-      TNECore.server().itemCalculations().setItems(data, amount);
+      PluginCore.server().itemCalculations().setItems(data, amount);
       return true;
     }
     return false;
@@ -66,7 +66,7 @@ public class SafeHandler implements HoldingsHandler {
   @Override
   public HoldingsEntry getHoldings(Account account, String region, Currency currency, CurrencyType currencyType) {
     if((currency instanceof ItemCurrency)) {
-      if(!account.isPlayer() || !TNECore.server().online(account.getIdentifier()) ||
+      if(!account.isPlayer() || !PluginCore.server().online(account.getIdentifier()) ||
           TNECore.eco().account().getLoading().contains(((PlayerAccount)account).getUUID().toString())) {
 
         //Offline players have their balances saved to their wallet so check it.
@@ -91,7 +91,7 @@ public class SafeHandler implements HoldingsHandler {
                                                                  ((PlayerAccount)account).getUUID());
 
       return new HoldingsEntry(region, currency.getUid(),
-                               TNECore.server().itemCalculations().calculateHoldings(data), identifier());
+                               PluginCore.server().itemCalculations().calculateHoldings(data), identifier());
     }
     //not item currency? then return zero... should never happen.
     return new HoldingsEntry(region,

@@ -24,7 +24,7 @@ import net.tnemc.libs.lamp.commands.annotation.Usage;
 import net.tnemc.libs.lamp.commands.orphan.OrphanCommand;
 import net.tnemc.libs.lamp.commands.sponge.SpongeCommandActor;
 import net.tnemc.libs.lamp.commands.sponge.annotation.CommandPermission;
-import net.tnemc.sponge.impl.SpongeCMDSource;
+import net.tnemc.plugincore.sponge.impl.SpongeCMDSource;
 
 /**
  * SpongeConvert
